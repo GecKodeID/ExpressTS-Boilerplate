@@ -1,24 +1,17 @@
 import express, { Request, Response } from 'express';
+import userRoute from './routes/users';
+import rolesRoute from './routes/roles';
+import aclRoute from './routes/acl';
+import cors from 'cors'; // cors must be added
 
 const app = express();
 
-app.get('/api/fizzbuzz/:number', (req: Request, res: Response) => {
-  const { number } = req.params;
-  const num = parseInt(number, 10);
-  let result = '';
-
-  if (isNaN(num)) {
-    result = 'Invalid input. Please provide a valid number.';
-  } else {
-    if (num % 3 === 0) result += 'Fizz';
-    if (num % 5 === 0) result += 'Buzz';
-    if (!result) result = number;
-  }
-
-  res.send(result);
-});
+app.use('/api/v1/users', userRoute);
+app.use('/api/v1/roles', rolesRoute);
+app.use('/api/v1/acl', aclRoute);
 
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
