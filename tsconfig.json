@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+      "target": "ES2018",
+      "module": "commonjs",
+      "strict": true,
+      "esModuleInterop": true, // Add this line
+      "skipLibCheck": true // Optional, but can help improve build performance
+    }
+  }
+  
