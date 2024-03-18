@@ -40,9 +40,6 @@ an simple REST API boilerplate with ACL and JWT Auth feature to build backend wi
 
     all of endpoint handler function to handle `/routes` response or request getted
 
-- ### `/controller`
-
-    bussiness logic putted in here such as CRUD to database
 
 ## How to Run
 

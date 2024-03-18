@@ -3,9 +3,9 @@ export interface RequestAddUserModel {
     email: string;
     password: string;
     name: string;
-    address: string;
+    address?: string;
     phone: string;
-    profile_picture: string;
-    created_at: string;
-    created_by: string;
+    profile_picture?: string;
+    created_at?: string;
+    created_by?: string;
 }

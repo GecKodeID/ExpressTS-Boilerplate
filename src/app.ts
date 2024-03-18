@@ -2,10 +2,13 @@ import express, { Request, Response } from 'express';
 import userRoute from './routes/users';
 import rolesRoute from './routes/roles';
 import aclRoute from './routes/acl';
+import authRoute from './routes/auth';
 import cors from 'cors'; // cors must be added
 
 const app = express();
 
+app.use(cors());
+app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/users', userRoute);
 app.use('/api/v1/roles', rolesRoute);
 app.use('/api/v1/acl', aclRoute);
