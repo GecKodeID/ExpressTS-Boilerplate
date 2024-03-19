@@ -4,6 +4,23 @@ import { RequestUpdateUserModel } from "../model/RequestUpdateUser.model";
 import { Query } from "../types/query-params";
 import { GeneralResponse } from "../types/response-general";
 import { ResponseGeneralList } from "../types/response-general-list";
+import { hashString } from "../utils";
+
+enum UserColumn {
+    ID = "id",
+    USERNAME = "username",
+    EMAIL = "email",
+    NAME = "name",
+    ADDRESS = "address",
+    PHONE = "phone",
+    CREATED_BY = "created_by",
+    UPDATED_BY = "updated_by"
+}
+
+function isUserColumn(value: string): value is UserColumn {
+    const usersColumn: string[] = Object.values(UserColumn);
+    return usersColumn.includes(value);
+}
 
 export async function listUsers(request:Query): Promise<ResponseGeneralList> {
     try {
@@ -18,13 +35,32 @@ export async function listUsers(request:Query): Promise<ResponseGeneralList> {
         created_at, 
         created_by, 
         updated_at, 
-        updated_by FROM users`;
+        updated_by FROM users `;
 
-        const items = await db.any(query);
+        let count = 0;
+        let params = [];
+        let cmdQuery = "";
+        if (request.search || request.search !== "") {
+            count++;
+            cmdQuery += `WHERE username ILIKE '%$${count}%'`
+            params.push(request.search)
+        }
+
+        if (request.sort || request.sort !== "") {
+            count++;
+            const sortBy = request.sort_by ? request.sort_by : "username";
+            request.sort = request.sort?.toLowerCase() === "asc" ? "ASC" : "DESC";
+            cmdQuery += `ORDER BY ${isUserColumn(sortBy) ? sortBy : "username"} ${request.sort}`;
+        }
+
+        const countData = await db.one(`SELECT COUNT(*) AS total FROM users ${cmdQuery}`);
+        
+        const items = await db.any(query+cmdQuery, params);
         return {
-            limit: 0,
-            page: 0,
-            order: "",
+            limit: request.limit,
+            page: request.page,
+            total: countData,
+            order: request.sort,
             item: items
         }
       } catch (error) {
@@ -63,10 +99,15 @@ export async function getUserById(id:string) {
 
 export async function addUserQuery(request:RequestAddUserModel): Promise<GeneralResponse> {
     try {
+        const hashedPassword = await hashString(request.password);
+        if (hashedPassword === "failed to hash") {
+            throw new Error("Failed to hashing an password");
+        }
+
         let query = "INSERT INTO users ";
-        let column = ['username', 'email', 'password', 'name', 'phone'];
-        let valueParam = ['$1', '$2', '$3', '$4', '$5'];
-        let param: string[] = [request.username, request.email, request.password, request.name, request.phone];
+        let column = ['username', 'email', 'password', 'name', 'phone', 'role_id'];
+        let valueParam = ['$1', '$2', '$3', '$4', '$5', '$6'];
+        let param: string[] = [request.username, request.email, hashedPassword, request.name, request.phone, request.role_id];
         let count = valueParam.length;
 
         if (request.address !== "" || request.address) {
@@ -134,7 +175,11 @@ export async function updateUser(request:RequestUpdateUserModel): Promise<Genera
         if (request.password || request.password !== "") {
             count++;
             column.push(`password=$${count}`);
-            param.push(request.password ? request.password : "");
+            const hashedPassword = await hashString(request.password ? request.password : "");
+            if (hashedPassword === "failed to hash") {
+                throw new Error("Failed to hashing an password");
+            }
+            param.push(hashedPassword);
         }
 
         if (request.name || request.name !== "") {
