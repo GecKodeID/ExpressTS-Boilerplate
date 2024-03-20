@@ -6,7 +6,7 @@ import db from "../database/database";
 import { addUserQuery } from "../queries/user";
 import { RequestLoginModel } from "../model/RequestLogin.model";
 import { ResponseLoginModel } from "../model/ResponseLogin.model";
-import { compareHashString } from "../utils";
+import { compareHashString } from "../misc/utils";
 
 export async function register(request:Request<{}, {}, RequestAddUserModel>, response:Response<GeneralResponse>) {
     

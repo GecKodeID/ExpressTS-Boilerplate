@@ -4,7 +4,7 @@ import { RequestUpdateUserModel } from "../model/RequestUpdateUser.model";
 import { Query } from "../types/query-params";
 import { GeneralResponse } from "../types/response-general";
 import { ResponseGeneralList } from "../types/response-general-list";
-import { hashString } from "../utils";
+import { hashString } from "../misc/utils";
 
 enum UserColumn {
     ID = "id",

@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { JWTauth } from "./middleware/auth";
+import { authenticate } from "./middleware/auth";
 
 const router = Router();
 
-router.use(JWTauth);
+router.use(authenticate);
 router.get('/'); // get all data
 router.post('/'); // save data
 router.get('/:id'); // get data by id

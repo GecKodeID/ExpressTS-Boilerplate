@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { addUser, deleteUser, getUserById, listUsers, updateUser } from "../handlers/users";
-import { JWTauth } from "./middleware/auth";
+import { authenticate } from "./middleware/auth";
 
 const router = Router();
 
-router.use(JWTauth);
+router.use(authenticate);
 router.get('/', listUsers); // get all data
 router.post('/', addUser); // save data
 router.get('/:id', getUserById); // get data by id
