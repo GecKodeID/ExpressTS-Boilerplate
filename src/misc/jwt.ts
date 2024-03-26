@@ -17,6 +17,7 @@ export function createToken(payload:JwtPayload, secret:string, duration:string):
 export function validateToken(token:string, secret:string): boolean {
     try {
         jwt.verify(token, secret, (err, decoded) => {
+            console.log("JWT DECODE ------------------->",decoded);
             if (err) {
                 throw new Error("Failed to verify the JWT");
             }

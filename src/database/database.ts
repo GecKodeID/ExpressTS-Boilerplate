@@ -1,4 +1,7 @@
 import pgPromise from "pg-promise";
+import env from 'dotenv';
+
+env.config();
 const pgp = pgPromise({});
 
 const dbUsername = process.env.DB_USERNAME ? process.env.DB_USERNAME : "username";

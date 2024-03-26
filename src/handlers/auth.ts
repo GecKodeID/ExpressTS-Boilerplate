@@ -22,7 +22,7 @@ export async function register(request:Request<{}, {}, RequestAddUserModel>, res
         }
     
         // search the role_id for users
-        const role = await db.one(`SELECT role_id FROM role_name=$1`, ['users']);
+        const role = await db.one(`SELECT role_id FROM users WHERE role_name=$1`, ['user']);
     
         const savedData = await addUserQuery({
             email: email,
@@ -33,6 +33,10 @@ export async function register(request:Request<{}, {}, RequestAddUserModel>, res
             role_id: role.role_id,
             created_by: username
         });
+
+        if (savedData.message === "something went wrong") {
+            throw new Error(savedData.message);
+        }
     
         return response.status(200).send({
             message: `successfuly register user ${username}, please login!`,

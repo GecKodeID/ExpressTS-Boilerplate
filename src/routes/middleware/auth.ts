@@ -1,5 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { validateToken } from '../../misc/jwt';
+import env from 'dotenv';
+
+env.config();
 
 export async function authenticate(request:Request, response:Response, next:NextFunction) {
     try {
