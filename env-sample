@@ -1,0 +1,20 @@
+# general app configuration
+PORT=8080
+APP_ENV=local
+JWT_SECRET=yoursecretissafe2024
+# reminder: using higher number of salt round impacting performance of hashing
+BCRYPT_SALT_ROUND=10
+
+# DB configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_DATABASE=boilerplate
+DB_USERNAME=admin
+DB_PASSWORD=password1234
+
+# for first time account
+DEFAULT_USERNAME=admin
+DEFAULT_PASSWORD=2749a75b-09fe-435e-ad43-53e691c70b86
+DEFAULT_EMAIL=gecko@test.com
+DEFAULT_NAME=administrator
+DEFAULT_PHONE=62333555666
