@@ -46,5 +46,5 @@ an simple REST API boilerplate with ACL and JWT Auth feature to build backend wi
 - copy file named `env-sample` and rename it to `.env`.
 - edit the `.env` file value as your desired such as DB_USERNAME, DB_PASSWORD, DB_DATABASE, and etc.
 - make sure `.postgratorrc.json` config is same with `.env`
-- run `yarn start:db` or `npm run start:db`
+- run `yarn start:docker-db` or `npm run start:docker-db`
 - run `yarn start:dev` or `npm run start:dev`

@@ -4,9 +4,11 @@
   "main": "index.js",
   "scripts": {
     "start": "yarn build && node app.js",
-    "start:db": "docker compose up -d && yarn postgrator",
+    "start:docker-db": "docker compose up -d && postgrator",
     "start:dev": "nodemon app.ts",
-    "build": "tsc --build"
+    "build": "tsc --build",
+    "test": "jest --rootDir=src/__test__",
+    "docker-down": "docker-compose down && docker volume rm expressts-boilerplate_psql_volume"
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.2",
