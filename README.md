@@ -4,17 +4,21 @@ an simple REST API boilerplate with ACL and JWT Auth feature to build backend wi
 
 ## Pre-requisite
 
-- ### Node.js
+- ### Node.js `v21.6.1`
     
     to run application
 
-- ### Docker
+- ### Docker `v4.27.2 (137060)`
 
     to run database PostgreSQL
 
-- ### postgrator-cli
+- ### postgrator-cli `v7.0.0`
 
     to migrating the `.sql` file in `/migrations` directory
+
+- ### nodemon `v3.1.0`
+
+    to run the `yarn start:dev` or `npm run start:dev` with hot reload
 
 ## Directory Explanation
 
@@ -22,7 +26,7 @@ an simple REST API boilerplate with ACL and JWT Auth feature to build backend wi
 
 - ### `/migrations`
 
-    here to put your database blueprint for your application in `.sql` filetype please write the patern of file like this `[seq].[action].sql` for complete guide see in [here](https://www.npmjs.com/package/postgrator-cli)
+    here to put your database blueprint for your application in `.sql` filetype for run with `yarn start:docker-db` or `npm run start:docker-db`, please write the patern of file like this `[seq].[action].sql` for complete guide see in [here](https://www.npmjs.com/package/postgrator-cli)
 
 - ### `/model`
 
@@ -39,6 +43,22 @@ an simple REST API boilerplate with ACL and JWT Auth feature to build backend wi
 - ### `/handlers`
 
     all of endpoint handler function to handle `/routes` response or request getted
+
+- ### `/queries`
+
+    all of CRUD to process data or gathering from database
+
+- ### `/misc`
+
+    all of miscellaneous function such as utility function can be re-used in anywhere
+
+- ### `/__test__`
+
+    where unit test file in here for running the `yarn test` or `npm run test` using jest
+
+- ### `/database`
+
+    connection to database function and the root of database function interface
 
 
 ## How to Run
