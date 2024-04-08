@@ -9,9 +9,10 @@ import { addUserQuery, deleteUserQuery, getUserByIdQuery, listUsersQuery, update
 
 export async function listUsersHandler(request:Request, response:Response<ResponseGeneralList>) {
     try {
-        const { search, sort, sort_by, limit, page } = request.query as Query;
+        const { search, search_by, sort, sort_by, limit, page } = request.query as Query;
         const data = await listUsersQuery({
             search: search,
+            search_by: search_by,
             sort_by: sort_by,
             sort: sort,
             limit: limit,

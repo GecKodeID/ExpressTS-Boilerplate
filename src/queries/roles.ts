@@ -31,17 +31,19 @@ export async function listRolesQuery(request:Query): Promise<ResponseGeneralList
         let count = 0;
         let params = [];
         let cmdQuery = "";
+
+        const searchBy = request.search_by ? request.search_by : "role_name";
         if (request.search) {
             count++;
-            cmdQuery += `WHERE role_name ILIKE '%$${count}%'`
-            params.push(request.search)
+            cmdQuery += `WHERE ${isRolesColumn(searchBy) ? searchBy : "role_name"} ILIKE $${count} `
+            params.push(`%${request.search}%`)
         }
 
-        const countData = await db.one(`SELECT COUNT(*) AS total FROM user_roles ${cmdQuery}`);
+        const countData = await db.one(`SELECT COUNT(*) AS total FROM userroles ${cmdQuery}`, params);
         
-        const sortBy = request.sort_by ? request.sort_by : "username";
+        const sortBy = request.sort_by ? request.sort_by : "role_name";
         request.sort = request.sort?.toLowerCase() === "asc" ? "ASC" : "DESC";
-        cmdQuery += `ORDER BY ${isRolesColumn(sortBy) ? sortBy : "username"} ${request.sort}`;
+        cmdQuery += `ORDER BY ${isRolesColumn(sortBy) ? sortBy : "role_name"} ${request.sort}`;
 
         count++;
         request.limit = request.limit ? request.limit : 10;
@@ -94,8 +96,8 @@ export async function getRolesByIdQuery(id:string): Promise<UserRolesItem> {
 export async function addRoleQuery(request:RequestAddRoleModel): Promise<GeneralResponse> {
     try {
         let query = "INSERT INTO userroles ";
-        let column = ['role_name'];
-        let valueParam = ['$1', '$2'];
+        let column = ['role_name', 'created_by'];
+        let valueParam = ['$1', '$2'];  
         let param: string[] = [request.role_name, request.created_by];
         let count = valueParam.length;
 
@@ -139,7 +141,7 @@ export async function updateRoleQuery(request:RequestUpdateRoleModel, id: string
 
         count++
         param.push(id);
-        query += `${column.join(',')} WHERE id=$${count} RETURNING role_id`;
+        query += `${column.join(',')} WHERE role_id=$${count} RETURNING role_id`;
 
         const updatedItem = await db.one(query, param);
 
