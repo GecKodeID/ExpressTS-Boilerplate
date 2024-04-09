@@ -42,20 +42,16 @@ export const userAddSchemaValidation = yup.object().shape({
 });
 
 export const ACLAddSchemaValidation = yup.object().shape({
-    role_id: yup.string().uuid('invalid-uuid').required('missing-role-id'),
+    role_id: yup.string().uuid('invalid-role-id-uuid').required('missing-role-id'),
     name: yup.string().required('missing-name').min(5),
     created_at: yup.string().nullable(),
-    created_by: yup.string().uuid().required('missing-created-by'),
-    updated_at: yup.string().nullable(),
-    updated_by: yup.string().uuid().required('missing-updated-by')
+    created_by: yup.string().uuid().required('missing-created-by')
 });
 
 export const userRolesAddSchemaValidation = yup.object().shape({
     role_name: yup.string().required('missing-role-name'),
     created_at: yup.string().nullable(),
-    created_by: yup.string().uuid().required('missing-created-by'),
-    updated_at: yup.string().nullable(),
-    updated_by: yup.string().uuid().required('missing-updated-by')
+    created_by: yup.string().uuid().required('missing-created-by')
 });
 
 export const userUpdateSchemaValidation = yup.object().shape({
@@ -71,15 +67,13 @@ export const userUpdateSchemaValidation = yup.object().shape({
 });
 
 export const ACLUpdateSchemaValidation = yup.object().shape({
-    id: yup.string().uuid('invalid-id-uuid').required('missing-id'),
-    role_id: yup.string().uuid('invalid-uuid').nullable(),
+    role_id: yup.string().uuid('invalid-role-id-uuid').nullable(),
     name: yup.string().nullable().min(5),
     updated_at: yup.string().nullable(),
     updated_by: yup.string().uuid('invalid-updated-by-uuid').required('missing-updated-by')
 });
 
 export const userRolesUpdateSchemaValidation = yup.object().shape({
-    id: yup.string().uuid('invalid-id-uuid').required('missing-id'),
     role_name: yup.string().nullable(),
     updated_at: yup.string().nullable(),
     updated_by: yup.string().uuid('invalid-updated-by-uuid').required('missing-updated-by')

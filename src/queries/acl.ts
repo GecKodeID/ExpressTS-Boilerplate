@@ -33,17 +33,19 @@ export async function listACLQuery(request:Query): Promise<ResponseGeneralList> 
         let count = 0;
         let params = [];
         let cmdQuery = "";
+
+        const searchBy = request.search_by ? request.search_by : "name";
         if (request.search) {
             count++;
-            cmdQuery += `WHERE name ILIKE '%$${count}%'`
-            params.push(request.search)
+            cmdQuery += `WHERE ${isACLColumn(searchBy) ? searchBy : "name"} ILIKE $${count} `
+            params.push(`%${request.search}%`)
         }
 
-        const countData = await db.one(`SELECT COUNT(*) AS total FROM ACL ${cmdQuery}`);
+        const countData = await db.one(`SELECT COUNT(*) AS total FROM ACL ${cmdQuery}`, params);
 
-        const sortBy = request.sort_by ? request.sort_by : "username";
+        const sortBy = request.sort_by ? request.sort_by : "name";
         request.sort = request.sort?.toLowerCase() === "asc" ? "ASC" : "DESC";
-        cmdQuery += `ORDER BY ${isACLColumn(sortBy) ? sortBy : "username"} ${request.sort}`;
+        cmdQuery += `ORDER BY ${isACLColumn(sortBy) ? sortBy : "name"} ${request.sort}`;
 
         count++;
         request.limit = request.limit ? request.limit : 10;
@@ -154,7 +156,7 @@ export async function updateACLQuery(request:RequestUpdateACLModel, id:string): 
         const updatedItem = await db.one(query, param);
 
         return {
-            id: updatedItem,
+            id: updatedItem.acl_id,
             message: "successfuly update ACL"
         }
     } catch (error: any) {

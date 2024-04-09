@@ -9,13 +9,14 @@ import { ACLItemModel } from "../model/ACLItem.model";
 
 export async function listAclHandler(request:Request, response:Response<ResponseGeneralList>) {
     try {
-        const { search, sort, sort_by, limit, page } = request.query as Query;
+        const { search, search_by, sort, sort_by, limit, page } = request.query as Query;
         const data = await listACLQuery({
             search: search,
             sort_by: sort_by,
             sort: sort,
             limit: limit,
-            page: page
+            page: page,
+            search_by: search_by
         });
 
         return response.status(200).send(data);

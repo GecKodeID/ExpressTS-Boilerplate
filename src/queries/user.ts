@@ -41,17 +41,19 @@ export async function listUsersQuery(request:Query): Promise<ResponseGeneralList
         let count = 0;
         let params = [];
         let cmdQuery = "";
+
+        const searchBy = request.search_by ? request.search_by : "username";
         if (request.search) {
             count++;
-            cmdQuery += `WHERE username ILIKE '%$${count}%'`
-            params.push(request.search)
+            cmdQuery += `WHERE ${isUserColumn(searchBy) ? searchBy : "username"} ILIKE $${count} `
+            params.push(`%${request.search}%`)
         }
 
-        const countData = await db.one(`SELECT COUNT(*) AS total FROM users ${cmdQuery}`);
+        const countData = await db.one(`SELECT COUNT(*) AS total FROM users ${cmdQuery}`, params);
         
         const sortBy = request.sort_by ? request.sort_by : "username";
         request.sort = request.sort?.toLowerCase() === "asc" ? "ASC" : "DESC";
-        cmdQuery += `ORDER BY ${isUserColumn(sortBy) ? sortBy : "username"} ${request.sort}`;
+        cmdQuery += ` ORDER BY ${isUserColumn(sortBy) ? sortBy : "username"} ${request.sort}`;
 
         count++;
         request.limit = request.limit ? request.limit : 10;
@@ -68,7 +70,7 @@ export async function listUsersQuery(request:Query): Promise<ResponseGeneralList
         return {
             limit: request.limit,
             page: request.page,
-            total: parseInt(countData.total),
+            total: countData.total,
             order: request.sort,
             items: items
         }
