@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "yarn build && node app.js",
-    "start:docker-db": "docker compose up -d && postgrator",
+    "start:init-db": "docker compose up -d && postgrator",
     "start:dev": "nodemon app.ts",
     "build": "tsc --build",
     "test": "jest --rootDir=src/__test__",
