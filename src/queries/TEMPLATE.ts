@@ -2,46 +2,46 @@ import db from "../database/database";
 import { Query } from "../types/query-params";
 import { GeneralResponse } from "../types/response-general";
 import { ResponseGeneralList } from "../types/response-general-list";
-import { RequestAddRoleModel, RequestUpdateRoleModel, UserRolesItem } from "../model/UserRoles.model";
+import { RequestAddTEMPLATEModel, RequestUpdateTEMPLATEModel, TEMPLATEItemModel } from "../model/TEMPLATE.model";
 
-enum RolesColumn {
-    ID = "role_id",
-    ROLE_NAME = "role_name",
+enum TEMPLATEColumn {
+    ID = "id",
+    NAME = "name",
     CREATED_BY = "created_by",
     UPDATED_BY = "updated_by"
 }
 
-function isRolesColumn(value: string): value is RolesColumn {
-    const column: string[] = Object.values(RolesColumn);
-    return column.includes(value);
+function isTEMPLATEColumn(value: string): value is TEMPLATEColumn {
+    const columns: string[] = Object.values(TEMPLATEColumn);
+    return columns.includes(value);
 }
 
-export async function listRolesQuery(request:Query): Promise<ResponseGeneralList> {
+export async function listTEMPLATEQuery(request:Query): Promise<ResponseGeneralList> {
     try {
         let query = `SELECT 
-        role_id,
-        role_name,  
+        id, 
+        name, 
         created_at, 
         created_by, 
         updated_at, 
-        updated_by FROM userroles `;
+        updated_by FROM template `;
 
         let count = 0;
         let params = [];
         let cmdQuery = "";
 
-        const searchBy = request.search_by ? request.search_by : "role_name";
+        const searchBy = request.search_by ? request.search_by : "name";
         if (request.search) {
             count++;
-            cmdQuery += `WHERE ${isRolesColumn(searchBy) ? searchBy : "role_name"} ILIKE $${count} `
+            cmdQuery += `WHERE ${isTEMPLATEColumn(searchBy) ? searchBy : "name"} ILIKE $${count} `
             params.push(`%${request.search}%`)
         }
 
-        const countData = await db.one(`SELECT COUNT(*) AS total FROM userroles ${cmdQuery}`, params);
-        
-        const sortBy = request.sort_by ? request.sort_by : "role_name";
+        const countData = await db.one(`SELECT COUNT(*) AS total FROM template ${cmdQuery}`, params);
+
+        const sortBy = request.sort_by ? request.sort_by : "name";
         request.sort = request.sort?.toLowerCase() === "asc" ? "ASC" : "DESC";
-        cmdQuery += `ORDER BY ${isRolesColumn(sortBy) ? sortBy : "role_name"} ${request.sort}`;
+        cmdQuery += `ORDER BY ${isTEMPLATEColumn(sortBy) ? sortBy : "name"} ${request.sort}`;
 
         count++;
         request.limit = request.limit ? request.limit : 10;
@@ -53,33 +53,34 @@ export async function listRolesQuery(request:Query): Promise<ResponseGeneralList
         cmdQuery += ` OFFSET $${count}`;
         let offset = request.page > 1 ? (request.page - 1) * request.limit : 0;
         params.push(offset);
-
+        
         const items = await db.any(query+cmdQuery, params);
         return {
             limit: request.limit,
             page: request.page,
-            total: countData.total,
+            total: parseInt(countData.total),
             order: request.sort,
             items: items
         }
       } catch (error: any) {
         console.log(error);
         throw new Error(error);
+        
       }
 }
 
-export async function getRolesByIdQuery(id:string): Promise<UserRolesItem> {
+export async function getTEMPLATEByIdQuery(id:string): Promise<TEMPLATEItemModel> {
     try {
         const item = await db.one(`SELECT 
-        role_id,
-        role_name, 
+        id, 
+        name, 
         created_at, 
         created_by, 
         updated_at, 
-        updated_by FROM userroles WHERE role_id=$1`, id);
+        updated_by FROM template WHERE id=$1`, id);
         return {
-            id: item.role_id,
-            role_name: item.role_name,
+            id: item.id,
+            name: item.name,
             created_at: item.created_at,
             created_by: item.created_by,
             updated_at: item.updated_at,
@@ -91,46 +92,44 @@ export async function getRolesByIdQuery(id:string): Promise<UserRolesItem> {
       }
 }
 
-export async function addRoleQuery(request:RequestAddRoleModel): Promise<GeneralResponse> {
+export async function addTEMPLATEQuery(request:RequestAddTEMPLATEModel): Promise<GeneralResponse> {
     try {
-        let query = "INSERT INTO userroles ";
-        let column = ['role_name', 'created_by'];
-        let valueParam = ['$1', '$2'];  
-        let param: string[] = [request.role_name, request.created_by];
-        let count = valueParam.length;
 
-        if (request.created_at) {
-            count++;
-            column.push('created_at');
-            valueParam.push(`$${count}`);
-            param.push(request.created_at ? request.created_at : "");
-        }
+        let query = "INSERT INTO template ";
+        let column = ['name', 'created_by'];
+        let valueParam = ['$1', '$2'];
+        let param: string[] = [request.name, request.created_by];
 
-        query += `(${column.join(',')}) VALUES (${valueParam.join(',')}) RETURNING role_id`
+        query += `(${column.join(',')}) VALUES (${valueParam.join(',')}) RETURNING id`
 
         const data = await db.one(query, param);
         return {
-            id: data.role_id,
-            message: "successfuly create role"
+            id: data.id,
+            message: "successfuly create TEMPLATE"
         };
     } catch (error: any) {
         console.log(error);
         throw new Error(error);
-        
     }
 }
 
-export async function updateRoleQuery(request:RequestUpdateRoleModel, id: string): Promise<GeneralResponse> {
+export async function updateTEMPLATEQuery(request:RequestUpdateTEMPLATEModel, id:string): Promise<GeneralResponse> {
     try {
-        let query = "UPDATE userroles SET ";
+        let query = "UPDATE template SET ";
         let column = [];
         let param: string[] = [];
         let count = column.length;
 
-        if (request.role_name) {
+        if (request.name) {
             count++;
-            column.push(`role_name=$${count}`);
-            param.push(request.role_name ? request.role_name : "");
+            column.push(`name=$${count}`);
+            param.push(request.name ? request.name : "");
+        }
+
+        if (request.updated_at) {
+            count++;
+            column.push(`updated_at=$${count}`);
+            param.push(request.updated_at ? request.updated_at : "");
         }
 
         count++;
@@ -139,13 +138,13 @@ export async function updateRoleQuery(request:RequestUpdateRoleModel, id: string
 
         count++
         param.push(id);
-        query += `${column.join(',')} WHERE role_id=$${count} RETURNING role_id`;
+        query += `${column.join(',')} WHERE id=$${count} RETURNING id`;
 
         const updatedItem = await db.one(query, param);
 
         return {
-            id: updatedItem.role_id,
-            message: "successfuly update role"
+            id: updatedItem.id,
+            message: "successfuly update TEMPLATE"
         }
     } catch (error: any) {
         console.log(error);
@@ -153,12 +152,12 @@ export async function updateRoleQuery(request:RequestUpdateRoleModel, id: string
     }
 }
 
-export async function deleteRoleQuery(id:string): Promise<GeneralResponse> {
+export async function deleteTEMPLATEQuery(id:string): Promise<GeneralResponse> {
     try {
-        await db.none('DELETE FROM userroles WHERE role_id = $1', id);
+        await db.none('DELETE FROM template WHERE id = $1', id);
         return {
             id: id,
-            message: "successfuly delete role"
+            message: "successfuly delete TEMPLATE"
         }
     } catch (error: any) {
         console.log(error);

@@ -2,9 +2,7 @@ import db from "../database/database";
 import { Query } from "../types/query-params";
 import { GeneralResponse } from "../types/response-general";
 import { ResponseGeneralList } from "../types/response-general-list";
-import { RequestAddACLModel } from "../model/RequestAddACL.model";
-import { RequestUpdateACLModel } from "../model/RequestUpdateACL.model";
-import { ACLItemModel } from "../model/ACLItem.model";
+import { ACLItemModel, RequestAddACLModel, RequestUpdateACLModel } from "../model/ACL.model";
 
 enum ACLColumn {
     ID = "acl_id",

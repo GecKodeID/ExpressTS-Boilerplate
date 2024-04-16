@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
-import { RequestAddUserModel } from "../model/RequestAddUser.model";
 import { GeneralResponse } from "../types/response-general";
 import db from "../database/database";
 import { addUserQuery } from "../queries/user";
-import { RequestLoginModel } from "../model/RequestLogin.model";
-import { ResponseLoginModel } from "../model/ResponseLogin.model";
+import { RequestLoginModel, ResponseLoginModel } from "../model/Auth.model";
 import { compareHashString } from "../misc/utils";
 import { createToken } from "../misc/jwt";
 import env from 'dotenv';
+import { RequestAddUserModel } from "../model/Users.model";
 
 env.config();
 

@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
-import { RequestAddUserModel } from "../model/RequestAddUser.model";
-import { RequestUpdateUserModel } from "../model/RequestUpdateUser.model";
 import { GeneralResponse } from "../types/response-general";
-import { UserItem } from "../model/UserItem.model";
+import { RequestAddUserModel, RequestUpdateUserModel, UserItem } from "../model/Users.model";
 import { Query } from "../types/query-params";
 import { ResponseGeneralList } from "../types/response-general-list";
 import { addUserQuery, deleteUserQuery, getUserByIdQuery, listUsersQuery, updateUserQuery } from "../queries/user";

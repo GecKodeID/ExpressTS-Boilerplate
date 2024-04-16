@@ -3,3 +3,8 @@ export interface RequestLoginModel {
     email?:string;
     password: string;
 }
+
+export interface ResponseLoginModel {
+    message?: string;
+    token: string;
+}
