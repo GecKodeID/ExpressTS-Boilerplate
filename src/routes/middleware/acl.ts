@@ -12,7 +12,6 @@ export async function checkACLUser(request:Request, response:Response, next:Next
 		WHERE users.user_id = $1 and acl.name = $2
 		`, [jwt.id, acl_name]);
 
-        console.log(result);
         if (result.count == 0) {
             throw new Error('You don\'t have permission to access this endpoint');
         }

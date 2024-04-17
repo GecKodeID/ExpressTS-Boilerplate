@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import { GeneralResponse } from "../types/response-general";
-import { RequestAddRoleModel } from "../model/RequestAddRole.model";
-import { RequestUpdateRoleModel } from "../model/RequestUpdate.model";
-import { UserRolesItem } from "../model/UserRolesItem.model";
+import { RequestAddRoleModel, RequestUpdateRoleModel, UserRolesItem } from "../model/UserRoles.model";
 import { ResponseGeneralList } from "../types/response-general-list";
 import { addRoleQuery, deleteRoleQuery, getRolesByIdQuery, listRolesQuery, updateRoleQuery } from "../queries/roles";
 import { Query } from "../types/query-params";

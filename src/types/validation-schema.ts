@@ -48,6 +48,12 @@ export const ACLAddSchemaValidation = yup.object().shape({
     created_by: yup.string().uuid().required('missing-created-by')
 });
 
+export const TEMPLATEAddSchemaValidation = yup.object().shape({
+    name: yup.string().required('missing-name').min(5),
+    created_at: yup.string().nullable(),
+    created_by: yup.string().uuid().required('missing-created-by')
+});
+
 export const userRolesAddSchemaValidation = yup.object().shape({
     role_name: yup.string().required('missing-role-name'),
     created_at: yup.string().nullable(),
@@ -75,6 +81,12 @@ export const ACLUpdateSchemaValidation = yup.object().shape({
 
 export const userRolesUpdateSchemaValidation = yup.object().shape({
     role_name: yup.string().nullable(),
+    updated_at: yup.string().nullable(),
+    updated_by: yup.string().uuid('invalid-updated-by-uuid').required('missing-updated-by')
+});
+
+export const TEMPLATEUpdateSchemaValidation = yup.object().shape({
+    name: yup.string().nullable().min(5),
     updated_at: yup.string().nullable(),
     updated_by: yup.string().uuid('invalid-updated-by-uuid').required('missing-updated-by')
 });

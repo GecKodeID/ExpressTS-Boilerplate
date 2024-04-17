@@ -1,11 +1,9 @@
 import db from "../database/database";
-import { RequestAddUserModel } from "../model/RequestAddUser.model";
-import { RequestUpdateUserModel } from "../model/RequestUpdateUser.model";
 import { Query } from "../types/query-params";
 import { GeneralResponse } from "../types/response-general";
 import { ResponseGeneralList } from "../types/response-general-list";
 import { hashString } from "../misc/utils";
-import { UserItem } from "../model/UserItem.model";
+import { RequestAddUserModel, RequestUpdateUserModel, UserItem } from "../model/Users.model";
 
 enum UserColumn {
     ID = "id",

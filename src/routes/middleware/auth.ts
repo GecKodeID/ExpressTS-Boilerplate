@@ -13,7 +13,6 @@ export async function authenticate(request:Request, response:Response, next:Next
         if (token) {
             jwt.verify(token, JWT_SECRET, (err, decoded: any) => {
                 const tokenResponse = decoded as JwtPayload;
-                console.log("JWT DECODE ------------------->",tokenResponse);
                 if (err) {
                     throw new Error("Failed to verify the JWT");
                 }

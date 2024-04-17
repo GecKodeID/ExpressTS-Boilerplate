@@ -4,11 +4,13 @@ import { Query } from "../types/query-params";
 import { ResponseGeneralList } from "../types/response-general-list";
 import { addACLQuery, deleteAclQuery, getACLByIdQuery, listACLQuery, updateACLQuery } from "../queries/acl";
 import { ACLItemModel, RequestAddACLModel, RequestUpdateACLModel } from "../model/ACL.model";
+import { addTEMPLATEQuery, deleteTEMPLATEQuery, getTEMPLATEByIdQuery, listTEMPLATEQuery, updateTEMPLATEQuery } from "../queries/TEMPLATE";
+import { RequestAddTEMPLATEModel, RequestUpdateTEMPLATEModel, TEMPLATEItemModel } from "../model/TEMPLATE.model";
 
-export async function listAclHandler(request:Request, response:Response<ResponseGeneralList>) {
+export async function listTEMPLATEHandler(request:Request, response:Response<ResponseGeneralList>) {
     try {
         const { search, search_by, sort, sort_by, limit, page } = request.query as Query;
-        const data = await listACLQuery({
+        const data = await listTEMPLATEQuery({
             search: search,
             sort_by: sort_by,
             sort: sort,
@@ -26,11 +28,11 @@ export async function listAclHandler(request:Request, response:Response<Response
     }
 }
 
-export async function getAclByIdHandler(request:Request, response:Response<ACLItemModel>) {
+export async function getTEMPLATEByIdHandler(request:Request, response:Response<TEMPLATEItemModel>) {
     try {
         const { id } = request.params;
 
-        const data = await getACLByIdQuery(id);
+        const data = await getTEMPLATEByIdQuery(id);
         
         return response.status(200).send(data);
     } catch (error) {
@@ -39,9 +41,9 @@ export async function getAclByIdHandler(request:Request, response:Response<ACLIt
     }
 }
 
-export async function addAclHandler(request:Request<{}, {}, RequestAddACLModel>, response:Response<GeneralResponse>) {
+export async function addTEMPLATEHandler(request:Request<{}, {}, RequestAddTEMPLATEModel>, response:Response<GeneralResponse>) {
     try {
-        const data = await addACLQuery(request.body);
+        const data = await addTEMPLATEQuery(request.body);
         return response.status(200).send(data);
     } catch (error) {
         console.log(error);
@@ -56,9 +58,9 @@ export async function addAclHandler(request:Request<{}, {}, RequestAddACLModel>,
     }
 }
 
-export async function updateAclHandler(request:Request<any, {}, RequestUpdateACLModel>, response:Response<GeneralResponse>) {
+export async function updateTEMPLATEHandler(request:Request<any, {}, RequestUpdateTEMPLATEModel>, response:Response<GeneralResponse>) {
     try {
-        const data = await updateACLQuery(request.body, request.params.id);
+        const data = await updateTEMPLATEQuery(request.body, request.params.id);
         return response.status(200).send(data);
     } catch (error) {
         console.log(error);
@@ -73,9 +75,9 @@ export async function updateAclHandler(request:Request<any, {}, RequestUpdateACL
     }
 }
 
-export async function deleteAclHandler(request:Request, response:Response<GeneralResponse>) {
+export async function deleteTEMPLATEHandler(request:Request, response:Response<GeneralResponse>) {
     try {
-        const data = await deleteAclQuery(request.params.id);
+        const data = await deleteTEMPLATEQuery(request.params.id);
         return response.status(200).send(data);
     } catch (error) {
         console.log(error);
